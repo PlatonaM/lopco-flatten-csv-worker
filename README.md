@@ -2,7 +2,7 @@
 
     {
         "name": "Flatten CSV",
-        "image": "platonam/lopco-flatten-csv-worker:dev",
+        "image": "platonam/lopco-flatten-csv-worker:latest",
         "data_cache_path": "/data_cache",
         "description": "Flatten a Comma-Separated Values file.",
         "configs": {
