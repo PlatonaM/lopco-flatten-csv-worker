@@ -32,3 +32,5 @@
             ]
         }
     }
+
+For the timestamp format as required by `time_format` please use these [format codes](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes).
