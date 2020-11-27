@@ -47,7 +47,7 @@ if python -u add_unix_time.py "$input_file_path" "${input_file_path}_1" "$delimi
             if python -u flatten.py "${input_file_path}_3" "$output_file_path" "$first_line" "$unique_column" "$time_column" "$delimiter"; then
                 head -5 "$output_file_path"
                 echo "total number of lines written:" $(( $(wc -l < "$output_file_path") - 1 ))
-                if ! curl --header 'Content-Type: application/json' --data "{\""$DEP_INSTANCE"\": [{\"output_csv\": \""$output_file"\"}]}" -X POST "$JOB_CALLBACK_URL"; then
+                if ! curl -s -S --header 'Content-Type: application/json' --data "{\""$DEP_INSTANCE"\": {\"output_csv\": \""$output_file"\"}}" -X POST "$JOB_CALLBACK_URL"; then
                     echo "callback failed"
                     rm "$output_file_path"
                 fi
