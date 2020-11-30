@@ -9,7 +9,8 @@
             "delimiter": null,
             "time_column": null,
             "unique_column": null,
-            "time_format": null
+            "time_format": null,
+            "separator": "_"
         },
         "input": {
             "type": "single",
