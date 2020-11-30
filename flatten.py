@@ -17,6 +17,7 @@ import sys
 
 old_first_line = sys.argv[3]
 delimiter = sys.argv[6]
+separator = sys.argv[7]
 
 old_first_line = old_first_line.split(delimiter)
 unique_col_num = old_first_line.index(sys.argv[4])
@@ -35,7 +36,7 @@ fields.remove(sys.argv[4])
 fields.remove(sys.argv[5])
 
 for item in unique_items:
-    new_first_line = new_first_line + ["{}-{}".format(item, field) for field in fields]
+    new_first_line = new_first_line + ["{}{}{}".format(field, separator, item) for field in fields]
 
 new_first_line_map = dict()
 
