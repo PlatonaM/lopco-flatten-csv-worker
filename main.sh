@@ -24,6 +24,7 @@
 # $time_format
 # $time_column
 # $unique_column
+# $separator
 
 
 output_file="$(cat /proc/sys/kernel/random/uuid | echo $(read s; echo ${s//-}))"
@@ -44,7 +45,7 @@ if python -u add_unix_time.py "$input_file_path" "${input_file_path}_1" "$delimi
             head -5 "${input_file_path}_3"
             first_line=$(head -n 1 $input_file_path)
             echo "flattening ..."
-            if python -u flatten.py "${input_file_path}_3" "$output_file_path" "$first_line" "$unique_column" "$time_column" "$delimiter"; then
+            if python -u flatten.py "${input_file_path}_3" "$output_file_path" "$first_line" "$unique_column" "$time_column" "$delimiter" "$separator"; then
                 head -5 "$output_file_path"
                 echo "total number of lines written:" $(( $(wc -l < "$output_file_path") - 1 ))
                 if ! curl -s -S --header 'Content-Type: application/json' --data "{\""$DEP_INSTANCE"\": {\"output_csv\": \""$output_file"\"}}" -X POST "$JOB_CALLBACK_URL"; then
