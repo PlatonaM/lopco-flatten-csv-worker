@@ -62,5 +62,5 @@ with open(sys.argv[1], "r") as in_file:
                 current_timestamp = line[time_col_num]
             for pos in range(len(line)):
                 if pos not in reserved_pos:
-                    flat_line[new_first_line_map[line[unique_col_num] + "-" + old_first_line[pos]]] = line[pos]
+                    flat_line[new_first_line_map[line[unique_col_num] + separator + old_first_line[pos]]] = line[pos]
         out_file.write("{}\n".format(delimiter.join(flat_line)))
