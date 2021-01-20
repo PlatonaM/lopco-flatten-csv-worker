@@ -19,6 +19,7 @@ old_first_line = sys.argv[3]
 delimiter = sys.argv[6]
 separator = sys.argv[7]
 
+old_first_line = old_first_line.strip()
 old_first_line = old_first_line.split(delimiter)
 unique_col_num = old_first_line.index(sys.argv[4])
 time_col_num = old_first_line.index(sys.argv[5])
