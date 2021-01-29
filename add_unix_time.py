@@ -24,7 +24,7 @@ time_col = sys.argv[5]
 
 with open(sys.argv[1], "r") as in_file:
     with open(sys.argv[2], "w") as out_file:
-        first_line = in_file.readline()
+        first_line = in_file.readline().strip()
         first_line = first_line.split(delimiter)
         time_col_num = first_line.index(time_col)
         for line in in_file:
