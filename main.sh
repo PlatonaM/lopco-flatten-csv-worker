@@ -41,7 +41,7 @@ if python -u add_unix_time.py "$input_file_path" "${input_file_path}_1" "$delimi
         head -5 "${input_file_path}_2"
         let col_num=col_num-1
         echo "removing unix timestamps ..."
-        if cut -d ";" -f "1"-$col_num "${input_file_path}_2" > "${input_file_path}_3"; then
+        if cut -d $delimiter -f "1"-$col_num "${input_file_path}_2" > "${input_file_path}_3"; then
             head -5 "${input_file_path}_3"
             first_line=$(head -n 1 $input_file_path)
             echo "flattening ..."
