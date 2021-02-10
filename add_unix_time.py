@@ -15,11 +15,12 @@
 import datetime
 import time
 import sys
+import os
 
 
-delimiter = sys.argv[3]
-time_format = sys.argv[4]
-time_col = sys.argv[5]
+delimiter = os.getenv("delimiter")
+time_format = os.getenv("time_format")
+time_col = os.getenv("time_column")
 
 
 with open(sys.argv[1], "r") as in_file:
