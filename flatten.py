@@ -13,16 +13,17 @@
 
 
 import sys
-
+import os
 
 old_first_line = sys.argv[3]
-delimiter = sys.argv[6]
-separator = sys.argv[7]
+delimiter = os.getenv("delimiter")
+unique_col = os.getenv("unique_column")
+time_col = os.getenv("time_column")
 
 old_first_line = old_first_line.strip()
 old_first_line = old_first_line.split(delimiter)
-unique_col_num = old_first_line.index(sys.argv[4])
-time_col_num = old_first_line.index(sys.argv[5])
+unique_col_num = old_first_line.index(unique_col)
+time_col_num = old_first_line.index(time_col)
 
 with open(sys.argv[1], "r") as in_file:
     unique_items = list()
@@ -31,10 +32,10 @@ with open(sys.argv[1], "r") as in_file:
         if line[unique_col_num] not in unique_items:
             unique_items.append(line[unique_col_num])
 
-new_first_line = [sys.argv[5]]
+new_first_line = [time_col]
 fields = old_first_line.copy()
-fields.remove(sys.argv[4])
-fields.remove(sys.argv[5])
+fields.remove(unique_col)
+fields.remove(time_col)
 
 for item in unique_items:
     new_first_line = new_first_line + ["{}{}{}".format(field, separator, item) for field in fields]
