@@ -19,6 +19,7 @@ old_first_line = sys.argv[3]
 delimiter = os.getenv("delimiter")
 unique_col = os.getenv("unique_column")
 time_col = os.getenv("time_column")
+name_pattern = os.getenv("name_pattern")
 
 old_first_line = old_first_line.strip()
 old_first_line = old_first_line.split(delimiter)
@@ -38,7 +39,10 @@ fields.remove(unique_col)
 fields.remove(time_col)
 
 for item in unique_items:
-    new_first_line = new_first_line + ["{}{}{}".format(field, separator, item) for field in fields]
+    if "unique_column" in name_pattern:
+        new_first_line = new_first_line + [name_pattern.format(unique_column=unique_col, unique_item=item, column_name=field) for field in fields]
+    else:
+        new_first_line = new_first_line + [name_pattern.format(unique_item=item, column_name=field) for field in fields]
 
 new_first_line_map = dict()
 
@@ -64,5 +68,8 @@ with open(sys.argv[1], "r") as in_file:
                 current_timestamp = line[time_col_num]
             for pos in range(len(line)):
                 if pos not in reserved_pos:
-                    flat_line[new_first_line_map[old_first_line[pos] + separator + line[unique_col_num]]] = line[pos]
+                    if "unique_column" in name_pattern:
+                        flat_line[new_first_line_map[name_pattern.format(unique_column=unique_col, unique_item=line[unique_col_num], column_name=old_first_line[pos])]] = line[pos]
+                    else:
+                        flat_line[new_first_line_map[name_pattern.format(unique_item=line[unique_col_num], column_name=old_first_line[pos])]] = line[pos]
         out_file.write("{}\n".format(delimiter.join(flat_line)))

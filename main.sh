@@ -24,6 +24,7 @@
 # $time_format
 # $time_column
 # $unique_column
+# $name_pattern
 
 
 output_file="$(cat /proc/sys/kernel/random/uuid | echo $(read s; echo ${s//-}))"
