@@ -56,6 +56,7 @@ for pos in range(len(new_first_line)):
 reserved_pos = (time_col_num, unique_col_num)
 output_file = uuid.uuid4().hex
 
+print("flattening ...")
 with open("{}/{}".format(data_cache_path, input_file), "r") as in_file:
     with open("{}/{}".format(data_cache_path, output_file), "w") as out_file:
         out_file.write("{}\n".format(delimiter.join(new_first_line)))
