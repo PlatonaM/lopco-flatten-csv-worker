@@ -12,21 +12,25 @@
 """
 
 
-import sys
+import uuid
 import os
+import requests
 
-old_first_line = sys.argv[3]
+
+dep_instance = os.getenv("DEP_INSTANCE")
+job_callback_url = os.getenv("JOB_CALLBACK_URL")
+input_file = os.getenv("input_csv")
 delimiter = os.getenv("delimiter")
 unique_col = os.getenv("unique_column")
 time_col = os.getenv("time_column")
 name_pattern = os.getenv("name_pattern")
+data_cache_path = "/data_cache"
 
-old_first_line = old_first_line.strip()
-old_first_line = old_first_line.split(delimiter)
-unique_col_num = old_first_line.index(unique_col)
-time_col_num = old_first_line.index(time_col)
 
-with open(sys.argv[1], "r") as in_file:
+with open("{}/{}".format(data_cache_path, input_file), "r") as in_file:
+    old_first_line = in_file.readline().strip().split(delimiter)
+    time_col_num = old_first_line.index(time_col)
+    unique_col_num = old_first_line.index(unique_col)
     unique_items = list()
     for line in in_file:
         line = line.split(delimiter)
@@ -50,17 +54,20 @@ for pos in range(len(new_first_line)):
     new_first_line_map[new_first_line[pos]] = pos
 
 reserved_pos = (time_col_num, unique_col_num)
+output_file = uuid.uuid4().hex
 
-with open(sys.argv[1], "r") as in_file:
-    with open(sys.argv[2], "w") as out_file:
+with open("{}/{}".format(data_cache_path, input_file), "r") as in_file:
+    with open("{}/{}".format(data_cache_path, output_file), "w") as out_file:
         out_file.write("{}\n".format(delimiter.join(new_first_line)))
         current_timestamp = None
+        line_count = 0
         for line in in_file:
             line = line.strip()
             line = line.split(delimiter)
             if line[time_col_num] != current_timestamp:
                 try:
                     out_file.write("{}\n".format(delimiter.join(flat_line)))
+                    line_count += 1
                 except NameError:
                     pass
                 flat_line = [str()] * len(new_first_line)
@@ -73,3 +80,23 @@ with open(sys.argv[1], "r") as in_file:
                     else:
                         flat_line[new_first_line_map[name_pattern.format(unique_item=line[unique_col_num], column_name=old_first_line[pos])]] = line[pos]
         out_file.write("{}\n".format(delimiter.join(flat_line)))
+        line_count += 1
+
+with open("{}/{}".format(data_cache_path, output_file), "r") as file:
+    for x in range(5):
+        print(file.readline().strip())
+print("total number of lines written: {}".format(line_count))
+
+try:
+    resp = requests.post(
+        job_callback_url,
+        json={dep_instance: {"output_csv": output_file}}
+    )
+    if not resp.ok:
+        raise RuntimeError(resp.status_code)
+except Exception as ex:
+    try:
+        os.remove("{}/{}".format(data_cache_path, output_file))
+    except Exception:
+        pass
+    raise ex
