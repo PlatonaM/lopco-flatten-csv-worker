@@ -59,6 +59,8 @@ output_file = uuid.uuid4().hex
 print("flattening ...")
 with open("{}/{}".format(data_cache_path, input_file), "r") as in_file:
     with open("{}/{}".format(data_cache_path, output_file), "w") as out_file:
+        line = in_file.readline().strip().split(delimiter)
+        line_len = len(line)
         out_file.write("{}\n".format(delimiter.join(new_first_line)))
         current_timestamp = None
         line_count = 0
@@ -74,7 +76,7 @@ with open("{}/{}".format(data_cache_path, input_file), "r") as in_file:
                 flat_line = [str()] * len(new_first_line)
                 flat_line[0] = line[time_col_num]
                 current_timestamp = line[time_col_num]
-            for pos in range(len(line)):
+            for pos in range(line_len):
                 if pos not in reserved_pos:
                     if "unique_column" in name_pattern:
                         flat_line[new_first_line_map[name_pattern.format(unique_column=unique_col, unique_item=line[unique_col_num], column_name=old_first_line[pos])]] = line[pos]
