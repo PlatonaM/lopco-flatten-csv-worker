@@ -63,7 +63,7 @@ with open("{}/{}".format(data_cache_path, input_file), "r") as in_file:
         line_len = len(line)
         out_file.write("{}\n".format(delimiter.join(new_first_line)))
         current_timestamp = None
-        line_count = 0
+        line_count = 1
         for line in in_file:
             line = line.strip()
             line = line.split(delimiter)
