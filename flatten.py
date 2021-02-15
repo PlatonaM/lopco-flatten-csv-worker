@@ -31,11 +31,11 @@ with open("{}/{}".format(data_cache_path, input_file), "r") as in_file:
     old_first_line = in_file.readline().strip().split(delimiter)
     time_col_num = old_first_line.index(time_col)
     unique_col_num = old_first_line.index(unique_col)
-    unique_items = list()
+    unique_items = set()
     for line in in_file:
         line = line.split(delimiter)
         if line[unique_col_num] not in unique_items:
-            unique_items.append(line[unique_col_num])
+            unique_items.add(line[unique_col_num])
 
 new_first_line = [time_col]
 fields = old_first_line.copy()
@@ -53,7 +53,7 @@ new_first_line_map = dict()
 for pos in range(len(new_first_line)):
     new_first_line_map[new_first_line[pos]] = pos
 
-reserved_pos = (time_col_num, unique_col_num)
+reserved_pos = {time_col_num, unique_col_num}
 output_file = uuid.uuid4().hex
 
 print("flattening ...")
