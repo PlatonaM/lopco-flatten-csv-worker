@@ -50,10 +50,11 @@ for item in unique_items:
         new_first_line = new_first_line + [name_pattern.format(unique_column=unique_col, unique_item=item, column_name=field) for field in fields]
     else:
         new_first_line = new_first_line + [name_pattern.format(unique_item=item, column_name=field) for field in fields]
+new_first_line_len = len(new_first_line)
 
 new_first_line_map = dict()
 
-for pos in range(len(new_first_line)):
+for pos in range(new_first_line_len):
     new_first_line_map[new_first_line[pos]] = pos
 
 reserved_pos = {time_col_num, unique_col_num}
@@ -63,7 +64,7 @@ print("flattening ...")
 with open("{}/{}".format(data_cache_path, input_file), "r") as in_file:
     with open("{}/{}".format(data_cache_path, output_file), "w") as out_file:
         line = in_file.readline().strip().split(delimiter)
-        line_len = len(line)
+        line_range = range(len(line))
         out_file.write("{}\n".format(delimiter.join(new_first_line)))
         current_timestamp = None
         line_count = 1
@@ -76,10 +77,10 @@ with open("{}/{}".format(data_cache_path, input_file), "r") as in_file:
                     line_count += 1
                 except NameError:
                     pass
-                flat_line = [str()] * len(new_first_line)
+                flat_line = [str()] * new_first_line_len
                 flat_line[0] = line[time_col_num]
                 current_timestamp = line[time_col_num]
-            for pos in range(line_len):
+            for pos in line_range:
                 if pos not in reserved_pos:
                     if "unique_column" in name_pattern:
                         flat_line[new_first_line_map[name_pattern.format(unique_column=unique_col, unique_item=line[unique_col_num], column_name=old_first_line[pos])]] = line[pos]
