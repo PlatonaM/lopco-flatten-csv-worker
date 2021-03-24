@@ -45,7 +45,7 @@ fields = old_first_line.copy()
 fields.remove(unique_col)
 fields.remove(time_col)
 
-for item in unique_items:
+for item in sorted(unique_items):
     if "unique_column" in name_pattern:
         new_first_line = new_first_line + [name_pattern.format(unique_column=unique_col, unique_item=item, column_name=field) for field in fields]
     else:
