@@ -26,7 +26,7 @@ Flattens a CSV file containing multiple lines per timestamp.
         time,location_ec-total_power,location_wm2-total_power,location_wm2-heater_power
         2021-02-01T05:00:00.000Z,4454.38330078125,24993.80078125,7296.2548828125
     
-    name_pattern` = {unique_item}_{column_name}
+    name_pattern = {unique_item}_{column_name}
     
         time,location,power
         2021-02-01T05:00:00.000Z,ec-total,4454.38330078125
